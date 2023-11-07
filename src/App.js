@@ -32,9 +32,32 @@ function App() {
     };
   };
 
-  useEffect(() => {
-    responseAPI()
-  }, []);
+  const formatLog = (log) => {
+    return log
+      .filter(chunk => chunk != null) // Remove any nullish values from the array
+      .map((chunk, index, array) => {
+        // Trim the current chunk to remove leading and trailing spaces.
+        chunk = chunk.trim();
+  
+        // Determine if there is a next chunk and if it starts with punctuation.
+        const nextChunkExists = index < array.length - 1;
+        const nextChunk = nextChunkExists ? array[index + 1].trim() : '';
+        const nextChunkStartsWithPunctuation = /^[.,!?;:"]/.test(nextChunk);
+  
+        // Determine if the current chunk ends with punctuation.
+        const currentChunkEndsWithPunctuation = /[.,!?;:"]$/.test(chunk);
+  
+        // Add a space after the current chunk if:
+        // - it doesn't end with punctuation, and the next chunk doesn't start with punctuation, or
+        // - it ends with punctuation and is not the last chunk.
+        if ((!currentChunkEndsWithPunctuation && !nextChunkStartsWithPunctuation) ||
+            (currentChunkEndsWithPunctuation && nextChunkExists)) {
+          chunk += ' ';
+        }
+  
+        return chunk;
+      }).join('');
+  };
 
   useEffect(() => {
     autoScroll();
@@ -44,9 +67,10 @@ function App() {
     <div className="App">
       <h1>Hello</h1>
       <div className="log-container">
-        <p className="log-paragraph">{log.join(' ')}</p>
+        <p className="log-paragraph">{formatLog(log)}</p>
         <div ref={logEndRef} />
       </div>
+      <button onClick={responseAPI}>Click Me</button>
     </div>
   );
 };
