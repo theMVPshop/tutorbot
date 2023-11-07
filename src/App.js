@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
@@ -9,6 +9,12 @@ const openai = new OpenAI({
 
 function App() {
   const [log, setLog] = useState([]);
+
+  const logEndRef = useRef(null);
+
+  const autoScroll = () => {
+    logEndRef.current?.scrollIntoView({ behavior: 'smooth', block: "end" });
+  };
   
   const responseAPI = async () => {
     const completion = await openai.chat.completions.create({
@@ -30,11 +36,16 @@ function App() {
     responseAPI()
   }, []);
 
+  useEffect(() => {
+    autoScroll();
+  }, [log]);
+
   return (
     <div className="App">
       <h1>Hello</h1>
       <div className="log-container">
         <p className="log-paragraph">{log.join(' ')}</p>
+        <div ref={logEndRef} />
       </div>
     </div>
   );
