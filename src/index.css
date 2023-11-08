@@ -1,0 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap");
+
+:root {
+  --font-1: "Lato", sans-serif;
+  --font-2: "Montserrat", sans-serif;
+
+  --primaryBG: #5b6d92;
+  --secondary: #ff6e42ff;
+  --logo-box: #1f3a5f;
+  --chatbox-send: #3d5a80;
+  --chatbot-box: #acc2ef;
+}

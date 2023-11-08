@@ -4,6 +4,8 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  font-family: var(--font-2);
+
 }
 
 .log-container {
