@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useState, useEffect, useRef } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
@@ -30,7 +30,6 @@ function App() {
   
     let codeBlockContent = '';
     let isCodeBlock = false;
-    let awaitingClosingTick = false; // New flag to handle awaiting the last `
 
     for await (const chunk of completion) {
       const content = chunk.choices[0].delta.content;
@@ -40,29 +39,28 @@ function App() {
         // Handle the start of a code block
         if (content.startsWith('```') && !isCodeBlock) {
           isCodeBlock = true;
-          continue; // Skip this chunk, it's just the start of a code block
+          codeBlockContent = ''; // Start accumulating a new code block
+          continue;
         }
 
         // Handle the content of a code block
         if (isCodeBlock) {
           codeBlockContent += content;
 
-          // Handle the end of a code block
-          if (awaitingClosingTick && content === '`') {
-            // This is the final ` completing the code block
-            isCodeBlock = false;
-            awaitingClosingTick = false;
+          // If we've reached the end of the code block
+          if (content.endsWith('``')) {
+            isCodeBlock = false; // We've exited the code block
 
-            // Remove the trailing ```
+            // Remove the closing backticks
             const cleanedContent = codeBlockContent.replace(/```$/, '');
+
+            // Store the cleaned code block
             setLog(prevLog => [...prevLog, `CODE_BLOCK_START${cleanedContent}CODE_BLOCK_END`]);
-            codeBlockContent = '';
-          } else if (content.endsWith('``')) {
-            // We've received `` and are now awaiting the final `
-            awaitingClosingTick = true;
+
+            codeBlockContent = ''; // Reset for the next possible code block
           }
         } else {
-          // Regular text chunk, just add it to the log
+          // For regular text, just add it to the log
           setLog(prevLog => [...prevLog, content]);
         }
       }
@@ -85,9 +83,10 @@ function App() {
               return null;
             } else if (parts[partIndex - 1] === 'CODE_BLOCK_START') {
               // This part is code, render with SyntaxHighlighter
+              const cleanedPart = part.replace(/``$/, ''); // Remove trailing backticks
               return (
-                <SyntaxHighlighter key={`code-${index}-${partIndex}`} language="javascript" style={dark}>
-                  {part}
+                <SyntaxHighlighter key={`code-${index}-${partIndex}`} language="javascript" style={atomDark}>
+                  {cleanedPart}
                 </SyntaxHighlighter>
               );
             } else {
@@ -99,7 +98,7 @@ function App() {
       }
       return []; // If entry is undefined, return an empty array
     });
-  };  
+  };
 
   useEffect(() => {
     autoScroll();
@@ -109,7 +108,7 @@ function App() {
     <div className="App">
       <h1>Hello</h1>
       <div className="log-container">
-        {formatLog(log)}
+        <p className="log-paragraph">{formatLog(log)}</p>
         <div ref={logEndRef} />
       </div>
       <button onClick={responseAPI}>Click Me</button>
