@@ -1,32 +1,49 @@
+
 import './App.css';
 import React, { useState, useEffect, useRef } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import OpenAI from 'openai';
 
+
 const openai = new OpenAI({
   apiKey: process.env.REACT_APP_KEY,
-  dangerouslyAllowBrowser: true
+  dangerouslyAllowBrowser: true,
 });
 
 function App() {
   const [log, setLog] = useState([]);
 
   const logEndRef = useRef(null);
-
-  const autoScroll = () => {
-    logEndRef.current?.scrollIntoView({ behavior: 'smooth', block: "end" });
+ // Vic added code
+  const [userInput, setUserInput] = useState("");
+   
+  const handleUserInput = (e) => {
+    setUserInput(e.target.value);
   };
-  
+//------------
+  const autoScroll = () => {
+    logEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  };
+
   const responseAPI = async () => {
     const completion = await openai.chat.completions.create({
       model: "gpt-4-1106-preview",
       messages: [
-        {"role": "system", "content": "You are an expert programmer and tutor, and your goal is to guide and support students of Austin Coding Academy in their journey to learn various programming languages and technologies. They will be beginners, some with no knowledge of coding or programming at all; keep this in mind as you reply to them. Offer guidance on how to navigate and utilize the chatbot effectively. Provide sequential guidance and resources for learning web development languages and technologies taught at Austin Coding Academy. Offer structured learning paths for the relevant languages or frameworks. Suggest supplementary resources such as tutorials, articles, and projects for practical learning. Respond to specific queries related to coding concepts, syntax, and problem-solving strategies. Offer explanations, code snippets, and examples to aid in understanding complex topics. Assist students in their coding projects by offering suggestions, debugging tips, and best practices. Provide guidance on project structuring, debugging techniques, and version control."},
-        {"role": "user", "content": "Hello, can you show me how to use an html <a> tag to link pages in a web app?"}
+        {
+          role: "system",
+          content:
+            "You are an expert programmer and tutor, and your goal is to guide and support students of Austin Coding Academy in their journey to learn various programming languages and technologies. They will be beginners, some with no knowledge of coding or programming at all; keep this in mind as you reply to them. Offer guidance on how to navigate and utilize the chatbot effectively. Provide sequential guidance and resources for learning web development languages and technologies taught at Austin Coding Academy. Offer structured learning paths for the relevant languages or frameworks. Suggest supplementary resources such as tutorials, articles, and projects for practical learning. Respond to specific queries related to coding concepts, syntax, and problem-solving strategies. Offer explanations, code snippets, and examples to aid in understanding complex topics. Assist students in their coding projects by offering suggestions, debugging tips, and best practices. Provide guidance on project structuring, debugging techniques, and version control.",
+        },
+        {
+          role: "user",
+          content:
+            "Hello, can you show me how to use an html <a> tag to link pages in a web app?",
+        },
       ],
       stream: true,
     });
+
   
     let codeBlockContent = '';
     let isCodeBlock = false;
@@ -98,6 +115,7 @@ function App() {
       }
       return []; // If entry is undefined, return an empty array
     });
+
   };
 
   useEffect(() => {
@@ -106,14 +124,27 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Hello</h1>
+      <div className="app__header">
+        <div>
+          <img />
+        </div>
+        <h1>DevMentor</h1>
+      </div>
       <div className="log-container">
         <p className="log-paragraph">{formatLog(log)}</p>
         <div ref={logEndRef} />
       </div>
-      <button onClick={responseAPI}>Click Me</button>
+      <div>
+        <input
+          type="text"
+          value={userInput}
+          onChange={handleUserInput}
+          placeholder="Send a message..."
+        />
+        <button onClick={responseAPI}>Click Me</button>
+      </div>
     </div>
   );
-};
+}
 
 export default App;

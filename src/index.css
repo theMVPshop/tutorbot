@@ -10,4 +10,9 @@
   --logo-box: #1f3a5f;
   --chatbox-send: #3d5a80;
   --chatbot-box: #acc2ef;
+  --txt-color: #e0e0e0;
+}
+
+.section__padding {
+  margin: 0rem 4rem;
 }
