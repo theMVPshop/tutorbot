@@ -1,6 +1,9 @@
-import "./App.css";
-import React, { useState, useEffect, useRef } from "react";
-import OpenAI from "openai";
+
+import './App.css';
+import React, { useState, useEffect, useRef } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import OpenAI from 'openai';
 
 
 const openai = new OpenAI({
@@ -25,7 +28,7 @@ function App() {
 
   const responseAPI = async () => {
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4-1106-preview",
       messages: [
         {
           role: "system",
@@ -41,41 +44,78 @@ function App() {
       stream: true,
     });
 
+  
+    let codeBlockContent = '';
+    let isCodeBlock = false;
+
     for await (const chunk of completion) {
-      console.log(chunk.choices[0].delta.content);
-      setLog((prevLog) => [...prevLog, chunk.choices[0].delta.content]);
+      const content = chunk.choices[0].delta.content;
+      console.log(content);
+
+      if (content !== undefined) {
+        // Handle the start of a code block
+        if (content.startsWith('```') && !isCodeBlock) {
+          isCodeBlock = true;
+          codeBlockContent = ''; // Start accumulating a new code block
+          continue;
+        }
+
+        // Handle the content of a code block
+        if (isCodeBlock) {
+          codeBlockContent += content;
+
+          // If we've reached the end of the code block
+          if (content.endsWith('``')) {
+            isCodeBlock = false; // We've exited the code block
+
+            // Remove the closing backticks
+            const cleanedContent = codeBlockContent.replace(/```$/, '');
+
+            // Store the cleaned code block
+            setLog(prevLog => [...prevLog, `CODE_BLOCK_START${cleanedContent}CODE_BLOCK_END`]);
+
+            codeBlockContent = ''; // Reset for the next possible code block
+          }
+        } else {
+          // For regular text, just add it to the log
+          setLog(prevLog => [...prevLog, content]);
+        }
+      }
     }
   };
 
-  const formatLog = (log) => {
-    return log
-      .filter((chunk) => chunk != null) // Remove any nullish values from the array
-      .map((chunk, index, array) => {
-        // Trim the current chunk to remove leading and trailing spaces.
-        chunk = chunk.trim();
-
-        // Determine if there is a next chunk and if it starts with punctuation.
-        const nextChunkExists = index < array.length - 1;
-        const nextChunk = nextChunkExists ? array[index + 1].trim() : "";
-        const nextChunkStartsWithPunctuation = /^[.,!?;:"]/.test(nextChunk);
-
-        // Determine if the current chunk ends with punctuation.
-        const currentChunkEndsWithPunctuation = /[.,!?;:"]$/.test(chunk);
-
-        // Add a space after the current chunk if:
-        // - it doesn't end with punctuation, and the next chunk doesn't start with punctuation, or
-        // - it ends with punctuation and is not the last chunk.
-        if (
-          (!currentChunkEndsWithPunctuation &&
-            !nextChunkStartsWithPunctuation) ||
-          (currentChunkEndsWithPunctuation && nextChunkExists)
-        ) {
-          chunk += " ";
+  const formatLog = (logEntries) => {
+    return logEntries.flatMap((entry, index) => { // Use flatMap to flatten the resulting arrays
+      if (entry !== undefined) {
+        if (typeof entry === 'string') {
+          // Split entry into parts of code and text
+          const parts = entry.split(/(CODE_BLOCK_START|CODE_BLOCK_END)/);
+  
+          return parts.map((part, partIndex) => {
+            if (part === 'CODE_BLOCK_START') {
+              // Next part is code, so skip rendering this marker
+              return null;
+            } else if (part === 'CODE_BLOCK_END') {
+              // Code has ended, so skip rendering this marker
+              return null;
+            } else if (parts[partIndex - 1] === 'CODE_BLOCK_START') {
+              // This part is code, render with SyntaxHighlighter
+              const cleanedPart = part.replace(/``$/, ''); // Remove trailing backticks
+              return (
+                <SyntaxHighlighter key={`code-${index}-${partIndex}`} language="javascript" style={atomDark}>
+                  {cleanedPart}
+                </SyntaxHighlighter>
+              );
+            } else {
+              // Regular text, render in a span
+              return <span key={`text-${index}-${partIndex}`}>{part}</span>;
+            }
+          }).filter(part => part !== null); // Filter out null entries (the markers)
         }
+      }
+      return []; // If entry is undefined, return an empty array
+    });
 
-        return chunk;
-      })
-      .join("");
   };
 
   useEffect(() => {
