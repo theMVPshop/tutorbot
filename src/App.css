@@ -106,3 +106,7 @@ button {
   padding: 8px 10px;
   border-radius: 8px;
 }
+
+textarea:focus::placeholder {
+  color: transparent;
+}
