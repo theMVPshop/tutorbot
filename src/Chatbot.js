@@ -23,17 +23,32 @@ const ChatBot = () => {
     e.target.style.height = e.target.scrollHeight + "px";
   };
 
+  // const handleSendMessage = () => {
+  //   responseAPI(userInput, setLog)
+
+  //   setMessages([
+  //     ...messages,
+  //     userInput,
+  //     formatLog(log),
+  //   ]);
+
+  //   // Clear the user input field
+  //   setUserInput("")
+  // };
+
   const handleSendMessage = () => {
-    responseAPI(userInput, setLog)
+    const userMessage = { role: "user", content: userInput };
+    const assistantMessage = "This is a hard-coded assistant reply."; // Hard-coded reply
 
     setMessages([
       ...messages,
-      userInput,
-      formatLog(log),
+      userMessage,
+      { role: "assistant", content: assistantMessage },
     ]);
+    setAssistantReply(assistantMessage);
 
     // Clear the user input field
-    setUserInput("")
+    setUserInput("");
   };
 
   useEffect(() => {
@@ -49,15 +64,32 @@ const ChatBot = () => {
         </div>
       </div>
       <div className="section__padding">
-        <div className="chatbox__cont ">
+        {/* <div className="chatbox__cont ">
           {messages.map((message, index) => (
             <div key={index} className="chatbox">
               {message}
             </div>
           ))}
-          {/* {formatLog(log)} */}
           <div ref={logEndRef} />
+        </div> */}
+        <div className="chatbox__cont">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`message-container ${
+                message.role === "user" ? "user" : "chatbot"
+              }`}
+            >
+              <div
+                className={`logo ${
+                  message.role === "user" ? "user__logo" : "chatbot__logo"
+                }`}
+              ></div>
+              <div className="chatbox">{message.content}</div>
+            </div>
+          ))}
         </div>
+
         <div className="user__input">
           <textarea
             value={userInput}
