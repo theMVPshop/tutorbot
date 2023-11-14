@@ -6,6 +6,7 @@
 }
 body {
   background-color: var(--primaryBG);
+  font-family: var(--font-1);
 }
 .chatbot__main {
   height: 100vh;
@@ -40,32 +41,20 @@ body {
   width: 2.5rem;
 }
 
-.chatbox__cont {
-  overflow-y: auto;
-  margin-top: 3.5rem;
-  padding: 0.5rem;
-  max-height: 80vh;
-  border: 1px black solid;
-}
-.chatbox__cont::-webkit-scrollbar {
-  width: 10px;
-}
-.chatbox__cont::-webkit-scrollbar-thumb {
-  background-color: var(--chatbox-send);
-  border-radius: 10px;
-  /* height: 50px; */
-}
-
 .user__input {
-  width: 100%;
+  width: calc(100% - 20px);
+  max-width: 88%;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 5rem;
   margin-bottom: 3rem;
-
-  /* position: absolute; */
-  /* bottom: 0; */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 .user__input textarea {
   flex: 1;
@@ -75,6 +64,8 @@ body {
   border-radius: 10px;
   background-color: var(--chatbox-send);
   box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 8px;
+  caret-color: var(--secondary);
+  color: var(--txt-color);
 }
 
 textarea::-webkit-scrollbar {
@@ -100,9 +91,51 @@ button {
 .user__input button:active {
   transform: scale(0.9);
 }
+
+.chatbox__cont {
+  overflow-y: auto;
+  margin-top: 3.5rem;
+  padding: 0.5rem;
+  max-height: 80vh;
+  border: 1px black solid;
+
+
+}
+.chatbox__cont::-webkit-scrollbar {
+  width: 10px;
+}
+.chatbox__cont::-webkit-scrollbar-thumb {
+  background-color: var(--chatbox-send);
+  border-radius: 10px;
+}
 .chatbox {
   background-color: var(--logo-box);
   margin: 0.5rem;
-  padding: 8px 10px;
-  border-radius: 8px;
+  padding: 10px 15px;
+  border-radius: 8px 8px 8px 0;
+  color: var(--txt-color);
+  letter-spacing: 0.8px;
+}
+
+.chatbot__logo {
+  background-image: url(./assets/DevLogo_color.png);
+  background-size: cover;
+}
+.user__logo {
+  background-image: url(./assets/Sample_User_Icon.png);
+  background-size: cover;
+}
+.logo {
+
+  background-color: var(--chatbox-send);
+  width: 32px;
+  height: 32px;
+  border-radius: 5px;
+  margin-right: 10px;
+  align-self: flex-start;
+}
+.message-container {
+  display: flex;
+  align-items: center; 
+  margin-bottom: 10px; 
 }
