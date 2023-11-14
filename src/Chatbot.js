@@ -1,35 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import DevLogo from "../src/assets/DevLogo.png";
+import { formatLog, responseAPI } from "./api";
 
-const ChatBot = ({ inputValue }) => {
-  const [messages, setMessages] = useState([]);
+const ChatBot = () => {
+  const [log, setLog] = useState([]);
   const [userInput, setUserInput] = useState("");
-  const [assistantReply, setAssistantReply] = useState("");
+  const handleUserInput = (e) => {
+    setUserInput(e.target.value);
+  };
+
+  const [messages, setMessages] = useState([]);
+
+  const logEndRef = useRef(null);
+
+  const autoScroll = () => {
+    logEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  };
 
   const expandInput = (e) => {
     e.target.style.height = "auto";
     e.target.style.height = e.target.scrollHeight + "px";
   };
 
-  const handleUserInput = (e) => {
-    setUserInput(e.target.value);
-  };
-
   const handleSendMessage = () => {
-    const userMessage = { role: "user", content: userInput };
-    const assistantMessage = "This is a hard-coded assistant reply."; // Hard-coded reply
+    responseAPI(userInput, setLog)
 
     setMessages([
       ...messages,
-      userMessage,
-      { role: "assistant", content: assistantMessage },
+      userInput,
+      formatLog(log),
     ]);
-    setAssistantReply(assistantMessage);
 
     // Clear the user input field
-    setUserInput("");
+    setUserInput("")
   };
+
+  useEffect(() => {
+    autoScroll();
+  }, [log]);
 
   return (
     <div className="chatbot__main">
@@ -41,13 +50,13 @@ const ChatBot = ({ inputValue }) => {
       </div>
       <div className="section__padding">
         <div className="chatbox__cont ">
-          {/* <div className="chatbox"> */}
           {messages.map((message, index) => (
             <div key={index} className="chatbox">
-              {message.content}
+              {message}
             </div>
           ))}
-          {/* </div> */}
+          {/* {formatLog(log)} */}
+          <div ref={logEndRef} />
         </div>
         <div className="user__input">
           <textarea
