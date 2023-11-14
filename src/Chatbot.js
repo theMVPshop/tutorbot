@@ -6,14 +6,16 @@ import { formatLog, responseAPI } from "./api";
 const ChatBot = () => {
   const [log, setLog] = useState([]);
   const [userInput, setUserInput] = useState("");
+  
+  const [messages, setMessages] = useState([]);
+  
+  const [assistantReply, setAssistantReply] = useState("");
+  
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
   };
-
-  const [messages, setMessages] = useState([]);
-
+  
   const logEndRef = useRef(null);
-
   const autoScroll = () => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   };
