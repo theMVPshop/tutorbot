@@ -124,6 +124,7 @@ button {
   margin-right: 10px;
   align-self: flex-start;
   flex-shrink: 0;
+  margin-top: 10px;
 }
 .chatbot__logo {
   background-image: url(./assets/Chatbot_color1.png);
