@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import DevLogo from "../src/assets/DevLogo.png";
 
-const ChatBot = ({ inputValue }) => {
+const ChatBot = () => {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [assistantReply, setAssistantReply] = useState("");
@@ -40,15 +40,31 @@ const ChatBot = ({ inputValue }) => {
         </div>
       </div>
       <div className="section__padding">
-        <div className="chatbox__cont ">
-          {/* <div className="chatbox"> */}
+        {/* <div className="chatbox__cont ">
           {messages.map((message, index) => (
             <div key={index} className="chatbox">
               {message.content}
             </div>
           ))}
-          {/* </div> */}
+        </div> */}
+        <div className="chatbox__cont">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`message-container ${
+                message.role === "user" ? "user" : "chatbot"
+              }`}
+            >
+              <div
+                className={`logo ${
+                  message.role === "user" ? "user__logo" : "chatbot__logo"
+                }`}
+              ></div>
+              <div className="chatbox">{message.content}</div>
+            </div>
+          ))}
         </div>
+
         <div className="user__input">
           <textarea
             value={userInput}
