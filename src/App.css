@@ -116,12 +116,14 @@ button {
 }
 
 .logo {
+  display: flex;
   background-color: var(--chatbox-send);
   width: 32px;
   height: 32px;
   border-radius: 5px;
   margin-right: 10px;
   align-self: flex-start;
+  flex-shrink: 0;
 }
 .chatbot__logo {
   background-image: url(./assets/Chatbot_color1.png);
