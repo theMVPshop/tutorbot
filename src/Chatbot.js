@@ -6,15 +6,15 @@ import { formatLog, responseAPI } from "./api";
 const ChatBot = () => {
   const [log, setLog] = useState([]);
   const [userInput, setUserInput] = useState("");
-  
+
   const [messages, setMessages] = useState([]);
-  
+
   const [assistantReply, setAssistantReply] = useState("");
-  
+
   const handleUserInput = (e) => {
     setUserInput(e.target.value);
   };
-  
+
   const logEndRef = useRef(null);
   const autoScroll = () => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -74,7 +74,7 @@ const ChatBot = () => {
           ))}
           <div ref={logEndRef} />
         </div> */}
-        <div className="chatbox__cont">
+        {/* <div className="chatbox__cont">
           {messages.map((message, index) => (
             <div
               key={index}
@@ -87,7 +87,30 @@ const ChatBot = () => {
                   message.role === "user" ? "user__logo" : "chatbot__logo"
                 }`}
               ></div>
+
               <div className="chatbox">{message.content}</div>
+            </div>
+          ))}
+        </div> */}
+        <div className="chatbox__cont">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`message-container ${
+                message.role === "user" ? "user" : "chatbot"
+              }`}
+            >
+              {message.role === "user" ? (
+                <>
+                  <div className={`logo user__logo`}></div>
+                  <div className="chatbox">{message.content}</div>
+                </>
+              ) : (
+                <>
+                  <div className={`logo chatbot__logo`}></div>
+                  <div className="chatbox">{message.content}</div>
+                </>
+              )}
             </div>
           ))}
         </div>
