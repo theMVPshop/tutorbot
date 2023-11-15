@@ -98,8 +98,6 @@ button {
   padding: 0.5rem;
   max-height: 80vh;
   border: 1px black solid;
-
-
 }
 .chatbox__cont::-webkit-scrollbar {
   width: 10px;
@@ -117,16 +115,7 @@ button {
   letter-spacing: 0.8px;
 }
 
-.chatbot__logo {
-  background-image: url(./assets/DevLogo_color.png);
-  background-size: cover;
-}
-.user__logo {
-  background-image: url(./assets/Sample_User_Icon.png);
-  background-size: cover;
-}
 .logo {
-
   background-color: var(--chatbox-send);
   width: 32px;
   height: 32px;
@@ -134,8 +123,24 @@ button {
   margin-right: 10px;
   align-self: flex-start;
 }
+.chatbot__logo {
+  background-image: url(./assets/Chatbot_color1.png);
+  background-size: cover;
+}
+.user__logo {
+  background-image: url(./assets/user_logo.png);
+  background-size: cover;
+}
+.user {
+  flex-direction: row-reverse;
+}
+.logo.user__logo {
+  margin-right: 0; 
+  margin-left: 10px; 
+
+}
 .message-container {
   display: flex;
-  align-items: center; 
-  margin-bottom: 10px; 
+  align-items: center;
+  margin-bottom: 10px;
 }
