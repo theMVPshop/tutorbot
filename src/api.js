@@ -83,7 +83,7 @@ export const formatLog = (logEntries) => {
             // This part is code, render with SyntaxHighlighter
             const cleanedPart = part.replace(/``$/, ''); // Remove trailing backticks
             return (
-              <SyntaxHighlighter key={`code-${index}-${partIndex}`} language="javascript" style={atomDark}>
+              <SyntaxHighlighter wrapLongLines key={`code-${index}-${partIndex}`} language="javascript" style={atomDark}>
                 {cleanedPart}
               </SyntaxHighlighter>
             );
