@@ -100,8 +100,10 @@ button {
 .chatbox__cont {
   overflow-y: auto;
   margin-top: 3.5rem;
+
   padding: 1rem;
   max-height: 88vh;
+
 }
 .chatbox__cont::-webkit-scrollbar {
   width: 10px;
@@ -128,6 +130,7 @@ button {
   margin-right: 10px;
   align-self: flex-start;
   flex-shrink: 0;
+  margin-top: 10px;
 }
 .chatbot__logo {
   background-image: url(./assets/Chatbot_color1.png);
