@@ -20,9 +20,17 @@ const ChatBot = () => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   };
 
+// expandInput func has changed to reduce the size of chatbox while conversation getting longer
+  const [textareaHeight, setTextareaHeight] = useState("auto");
+  const MAX_TEXTAREA_HEIGHT = 100; 
+
   const expandInput = (e) => {
-    e.target.style.height = "auto";
-    e.target.style.height = e.target.scrollHeight + "px";
+    const newHeight =
+      e.target.scrollHeight > MAX_TEXTAREA_HEIGHT
+        ? `${MAX_TEXTAREA_HEIGHT}px`
+        : "auto";
+    setTextareaHeight(newHeight);
+    e.target.style.height = newHeight;
   };
 
   // const handleSendMessage = () => {
@@ -40,7 +48,7 @@ const ChatBot = () => {
 
   const handleSendMessage = () => {
     const userMessage = { role: "user", content: userInput };
-    const assistantMessage = "This is a hard-coded assistant reply."; // Hard-coded reply
+    const assistantMessage = "This is Hard-coded reply";
 
     setMessages([
       ...messages,
@@ -49,6 +57,11 @@ const ChatBot = () => {
     ]);
     setAssistantReply(assistantMessage);
 
+    // Reset textarea height after sending the message
+    const textarea = document.querySelector(".user__input textarea");
+    if (textarea) {
+      textarea.style.height = "auto";
+    }
     // Clear the user input field
     setUserInput("");
   };
@@ -74,25 +87,11 @@ const ChatBot = () => {
           ))}
           <div ref={logEndRef} />
         </div> */}
-        {/* <div className="chatbox__cont">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`message-container ${
-                message.role === "user" ? "user" : "chatbot"
-              }`}
-            >
-              <div
-                className={`logo ${
-                  message.role === "user" ? "user__logo" : "chatbot__logo"
-                }`}
-              ></div>
 
-              <div className="chatbox">{message.content}</div>
-            </div>
-          ))}
-        </div> */}
-        <div className="chatbox__cont">
+        <div
+          className="chatbox__cont"
+          style={{ maxHeight: `calc(88vh - ${textareaHeight})` }}
+        >
           {messages.map((message, index) => (
             <div
               key={index}
@@ -117,6 +116,7 @@ const ChatBot = () => {
 
         <div className="user__input">
           <textarea
+            style={{ height: textareaHeight }}
             value={userInput}
             onChange={handleUserInput}
             onInput={expandInput}
