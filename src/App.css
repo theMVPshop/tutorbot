@@ -96,7 +96,7 @@ button {
   transform: scale(0.9);
 }
 
-/* *******Main Section---Chatbox container******* */
+/* ******* Main Section---Chatbox container ******* */
 .chatbox__cont {
   overflow-y: auto;
   margin-top: 3.5rem;
