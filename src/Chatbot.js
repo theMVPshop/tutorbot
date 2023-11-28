@@ -12,7 +12,12 @@ const ChatBot = () => {
   const [assistantReply, setAssistantReply] = useState("");
 
   const handleUserInput = (e) => {
-    setUserInput(e.target.value);
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    } else {
+      setUserInput(e.target.value);
+    }
   };
 
   const logEndRef = useRef(null);
@@ -20,9 +25,9 @@ const ChatBot = () => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   };
 
-// expandInput func has changed to reduce the size of chatbox while conversation getting longer
+  // expandInput func has changed to reduce the size of chatbox when conversation getting longer
   const [textareaHeight, setTextareaHeight] = useState("auto");
-  const MAX_TEXTAREA_HEIGHT = 100; 
+  const MAX_TEXTAREA_HEIGHT = 100;
 
   const expandInput = (e) => {
     const newHeight =
@@ -46,15 +51,22 @@ const ChatBot = () => {
   //   setUserInput("")
   // };
 
+  // This is updated code for onKeyDown (Enter) to Submit
   const handleSendMessage = () => {
-    const userMessage = { role: "user", content: userInput };
-    const assistantMessage = "This is Hard-coded reply";
+    if (userInput.trim() === "") {
+      return; // Don't send empty messages
+    }
 
-    setMessages([
+    const userMessage = { role: "user", content: userInput };
+    const assistantMessage = "This is a hardcoded reply"; // You can replace this with your actual assistant reply logic
+
+    const updatedMessages = [
       ...messages,
       userMessage,
       { role: "assistant", content: assistantMessage },
-    ]);
+    ];
+
+    setMessages(updatedMessages);
     setAssistantReply(assistantMessage);
 
     // Reset textarea height after sending the message
@@ -62,6 +74,7 @@ const ChatBot = () => {
     if (textarea) {
       textarea.style.height = "auto";
     }
+
     // Clear the user input field
     setUserInput("");
   };
@@ -122,6 +135,7 @@ const ChatBot = () => {
             onInput={expandInput}
             placeholder="Type a message..."
             rows="1"
+            onKeyDown={handleUserInput}
           />
           <button onClick={handleSendMessage}>Send</button>
         </div>
