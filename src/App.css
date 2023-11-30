@@ -117,10 +117,11 @@ button {
 .chatbox {
   background-color: var(--logo-box);
   margin: 0.5rem;
-  padding: 12px 20px;
+  padding: 12px 15px;
   border-radius: 8px;
   color: var(--txt-color);
   letter-spacing: 0.8px;
+  line-height: 1.3;
 }
 
 .logo {
@@ -154,4 +155,7 @@ button {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+}
+.chatbox__assis {
+  padding: 0px 1.5rem; 
 }
