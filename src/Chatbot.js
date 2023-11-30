@@ -73,7 +73,6 @@ const ChatBot = () => {
         content: stream,
       };
       setChatHistory(updatedHistory);
-      console.log(stream);
     }
   }, [stream]);
 

@@ -38,6 +38,7 @@ class Chat {
   
 
   setApiKey(apiKey) {
+    console.log(apiKey);
     this.apiKey = apiKey;
   }
 
