@@ -1,0 +1,38 @@
+@media screen and (max-width: 850px) {
+  .section__padding {
+    margin: 0rem .8rem;
+  }
+  .chatbox {
+    font-size: 14px;
+  }
+  .user__input {
+    margin-bottom: .8rem;
+  }
+}
+@media screen and (max-width: 550px) {
+  .section__padding {
+    margin: 0rem 0rem;
+  }
+  .chatbox {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  .chatbox__assis {
+    padding: 0px 1.1rem; 
+  }
+  .user__input {
+    width: 100%;
+    margin-bottom: 5px;
+    height: 5rem;
+  }
+
+  .user__input textarea {
+    max-height: 50px;
+    resize: none;
+    padding: 0.8rem;
+  }
+  .user__input button {
+    padding: 0.7rem 1rem;
+    font-size: 0.8rem;
+  }
+}
