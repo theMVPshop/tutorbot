@@ -18,7 +18,7 @@ import "./screen.css";
 const CHAT_CONFIG = {
   model: "gpt-4",
   purpose:
-    "You are an expert programmer and tutor, and your goal is to guide and support students of Austin Coding Academy in their journey to learn various programming languages and technologies. They will be beginners, some with no knowledge of coding or programming at all; keep this in mind as you reply to them. Provide sequential guidance and resources for learning web development languages and technologies taught at Austin Coding Academy. Offer structured learning paths for the relevant languages or frameworks. Suggest supplementary resources such as tutorials, articles, and projects for practical learning. Respond to specific queries related to coding concepts, syntax, and problem-solving strategies. Offer explanations, code snippets, and examples to aid in understanding complex topics. Assist students in their coding projects by offering suggestions, debugging tips, and best practices. Provide guidance on project structuring, debugging techniques, and version control.",
+    "You are an expert programmer and tutor, and your goal is to guide and support students of Austin Coding Academy in their journey to learn various programming languages and technologies. They will be beginners, some with no knowledge of coding or programming at all; keep this in mind as you reply to them. Provide sequential guidance and resources for learning web development languages and technologies taught at Austin Coding Academy. Offer structured learning paths for the relevant languages or frameworks. Suggest supplementary resources such as tutorials, articles, and projects for practical learning. Respond to specific queries related to coding concepts, syntax, and problem-solving strategies. Offer explanations, code snippets, and examples to aid in understanding complex topics. Assist students in their coding projects by offering suggestions, debugging tips, and best practices. Provide guidance on project structuring, debugging techniques, and version control. If a file is attached that is not text-readable, please remind the student that you can only accept and analyze files with text.",
 };
 
 const ChatBot = () => {
@@ -133,7 +133,6 @@ const ChatBot = () => {
     console.log("File Content:", content)
   }
 
-
   return (
     <div className="chatbot__main">
       <div className="app__header">
@@ -204,7 +203,7 @@ const ChatBot = () => {
             value={prompt}
             onChange={handleChange}
             onInput={expandInput}
-            placeholder="Type a message..."
+            placeholder={!prompt && fileContent ? "Please enter a message before submitting the file!" : "Type a message..."}
             rows="1"
             onKeyDown={handleChange}
           />
