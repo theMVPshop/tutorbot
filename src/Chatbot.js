@@ -117,6 +117,14 @@ const ChatBot = () => {
     const file = event.target.files[0]
 
     if (file) {
+      // Check if the file type is an image
+      if (file.type.startsWith("image/")) {
+        console.error("Image files are not allowed.")
+        // Optionally, you can reset the file input to clear the selected file
+        event.target.value = null
+        return
+      }
+
       const reader = new FileReader()
 
       reader.onload = (e) => {
@@ -128,6 +136,7 @@ const ChatBot = () => {
       reader.readAsText(file)
     }
   }
+
 
   const handleFileContent = (content) => {
     console.log("File Content:", content)
