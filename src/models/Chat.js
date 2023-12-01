@@ -35,7 +35,6 @@ class Chat {
     this.user = config.user || '';
     this.apiKey = "";
   }
-  
 
   setApiKey(apiKey) {
     this.apiKey = apiKey;
