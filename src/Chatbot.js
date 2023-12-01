@@ -73,7 +73,6 @@ const ChatBot = () => {
         content: stream,
       };
       setChatHistory(updatedHistory);
-      console.log(stream);
     }
   }, [stream]);
 
@@ -98,18 +97,42 @@ const ChatBot = () => {
     // Clear the user input field
     setPrompt("");
     try {
-      await chat.createResponse(prompt);
+      await chat.createResponse(prompt + fileContent);
     } catch (error) {
       console.error(error);
     } finally {
       setStream("");
       setIsLoading(false);
+      setFileContent("")
     }
   };
 
   useEffect(() => {
     autoScroll();
   }, [chatHistory]);
+
+  const [fileContent, setFileContent] = useState("")
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0]
+
+    if (file) {
+      const reader = new FileReader()
+
+      reader.onload = (e) => {
+        const content = e.target.result
+        setFileContent(content)
+        handleFileContent(content)
+      }
+
+      reader.readAsText(file)
+    }
+  }
+
+  const handleFileContent = (content) => {
+    console.log("File Content:", content)
+  }
+
 
   return (
     <div className="chatbot__main">
@@ -145,7 +168,7 @@ const ChatBot = () => {
                       children={message.content}
                       components={{
                         code({ node, inline, className, children, ...props }) {
-                          const match = /language-(\w+)/.exec(className || "");
+                          const match = /language-(\w+)/.exec(className || "")
                           return !inline && match ? (
                             <SyntaxHighlighter
                               wrapLongLines
@@ -160,7 +183,7 @@ const ChatBot = () => {
                             <code className={className} {...props}>
                               {children}
                             </code>
-                          );
+                          )
                         },
                       }}
                     />
@@ -182,13 +205,14 @@ const ChatBot = () => {
             rows="1"
             onKeyDown={handleChange}
           />
+          <input type="file" onChange={handleFileUpload} />
           <button disabled={isLoading} onClick={handleSubmit}>
             Send
           </button>
         </div>
       </div>
     </div>
-  );
+  )
 };
 
 export default ChatBot;
