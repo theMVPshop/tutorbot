@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import DevLogo from "../src/assets/DevLogo.png";
+import UploadFIle from "../src/assets/UploadFIle.png";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -103,7 +104,7 @@ const ChatBot = () => {
     } finally {
       setStream("");
       setIsLoading(false);
-      setFileContent("")
+      setFileContent("");
     }
   };
 
@@ -111,27 +112,36 @@ const ChatBot = () => {
     autoScroll();
   }, [chatHistory]);
 
-  const [fileContent, setFileContent] = useState("")
+  const [fileContent, setFileContent] = useState("");
 
   const handleFileUpload = (event) => {
-    const file = event.target.files[0]
+    const file = event.target.files[0];
 
     if (file) {
+      // Check if the file type is an image
+      if (file.type.startsWith("image/")) {
+        console.error("Image files are not allowed.")
+        // Optionally, you can reset the file input to clear the selected file
+        event.target.value = null
+        return
+      }
+
       const reader = new FileReader()
 
       reader.onload = (e) => {
-        const content = e.target.result
-        setFileContent(content)
-        handleFileContent(content)
-      }
+        const content = e.target.result;
+        setFileContent(content);
+        handleFileContent(content);
+      };
 
-      reader.readAsText(file)
+      reader.readAsText(file);
     }
-  }
+  };
+
 
   const handleFileContent = (content) => {
-    console.log("File Content:", content)
-  }
+    console.log("File Content:", content);
+  };
 
   return (
     <div className="chatbot__main">
@@ -167,7 +177,7 @@ const ChatBot = () => {
                       children={message.content}
                       components={{
                         code({ node, inline, className, children, ...props }) {
-                          const match = /language-(\w+)/.exec(className || "")
+                          const match = /language-(\w+)/.exec(className || "");
                           return !inline && match ? (
                             <SyntaxHighlighter
                               wrapLongLines
@@ -182,10 +192,18 @@ const ChatBot = () => {
                             <code className={className} {...props}>
                               {children}
                             </code>
-                          )
+                          );
                         },
-                        a({node, children, ...props}) {
-                          return <a {...props} target="_blank" rel="noopener noreferrer">{children}</a>
+                        a({ node, children, ...props }) {
+                          return (
+                            <a
+                              {...props}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {children}
+                            </a>
+                          );
                         },
                       }}
                     />
@@ -207,14 +225,17 @@ const ChatBot = () => {
             rows="1"
             onKeyDown={handleChange}
           />
-          <input type="file" onChange={handleFileUpload} />
           <button disabled={isLoading} onClick={handleSubmit}>
             Send
           </button>
+          <label>
+            <img src={UploadFIle} alt="uploadfile icon" />
+            <input type="file" onChange={handleFileUpload} />
+          </label>
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default ChatBot;
