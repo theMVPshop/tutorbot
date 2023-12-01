@@ -44,7 +44,7 @@ body {
 /* ******** Input text and Send button ******** */
 .user__input {
   width: calc(100% - 20px);
-  max-width: 88%;
+  max-width: 100%;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -56,8 +56,8 @@ body {
   left: 0;
   right: 0;
   z-index: 1000;
-
   background-color: var(--primaryBG);
+  padding: 0 16px;
 }
 .user__input textarea {
   flex: 1;
@@ -90,7 +90,8 @@ button {
   cursor: pointer;
   transition: transform 0.2s;
 }
-.user__input button:hover {
+.user__input button:hover,
+img:hover {
   transform: scale(1.1);
 }
 
@@ -98,6 +99,18 @@ button {
   transform: scale(0.9);
 }
 
+input[type="file"] {
+  display: none;
+}
+.user__input img {
+  width: 45px;
+  margin-left: 20px;
+  border-radius: 10px;
+  background-color: var(--chatbox-send);
+  box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
 /* ******* Main Section---Chatbox container ******* */
 .chatbox__cont {
   overflow-y: auto;
@@ -105,7 +118,6 @@ button {
 
   padding: 1rem;
   max-height: 80vh;
-
 }
 .chatbox__cont::-webkit-scrollbar {
   width: 10px;
@@ -157,7 +169,7 @@ button {
   margin-bottom: 10px;
 }
 .chatbox__assis {
-  padding: 0px 1.5rem; 
+  padding: 0px 1.5rem;
 }
 .chatbox__assis a {
   color: var(--secondary);
