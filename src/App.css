@@ -90,8 +90,7 @@ button {
   cursor: pointer;
   transition: transform 0.2s;
 }
-.user__input button:hover,
-img:hover {
+.user__input button:hover {
   transform: scale(1.1);
 }
 
@@ -102,7 +101,8 @@ img:hover {
 input[type="file"] {
   display: none;
 }
-.user__input img {
+
+.icon {
   width: 45px;
   margin-left: 20px;
   border-radius: 10px;
@@ -110,6 +110,13 @@ input[type="file"] {
   box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 8px;
   cursor: pointer;
   transition: transform 0.2s;
+}
+.icon:hover {
+  transform: scale(1.1);
+
+}
+.icon:active {
+  transform: scale(0.9);
 }
 /* ******* Main Section---Chatbox container ******* */
 .chatbox__cont {

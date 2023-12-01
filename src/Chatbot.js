@@ -12,6 +12,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 import Chat from "./models/Chat";
+import { MdOutlineFileUpload } from "react-icons/md";
 
 import "./App.css";
 import "./screen.css";
@@ -220,7 +221,12 @@ const ChatBot = () => {
             Send
           </button>
           <label>
-            <img src={UploadFIle} alt="uploadfile icon" />
+            <MdOutlineFileUpload
+              size={40}
+              style={{ fill: fileContent ? "green" : "#ff6e42ff" }}
+              className="icon"
+            />
+            {/* <img src={UploadFIle} alt="uploadfile icon" /> */}
             <input type="file" onChange={handleFileUpload} />
           </label>
         </div>
